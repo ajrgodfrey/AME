@@ -1,0 +1,16 @@
+[BASIC]
+# allow upper case for module name
+module-rgx=[a-zA-Z0-9_]+
+# Naming style matching correct variable names
+variable-rgx=[a-z_][a-zA-Z0-9]*
+# Naming style matching correct method names
+method-rgx=[a-zA-Z0-9]*
+# function names and attribute names
+function-rgx=[a-zA-Z0-9]*
+attr-rgx=[a-zA-Z0-9]*
+
+
+
+[MESSAGES CONTROL]
+# ignore some missing doc strings
+disable=C0115,C0116
