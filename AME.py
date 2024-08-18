@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+"""
+This module provides a very basic text editor and HTML reader 
+so screen reader users can write and process markdown.
+"""
+
 # import base packages
 import sys
 import platform
