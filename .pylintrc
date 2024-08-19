@@ -14,3 +14,8 @@ attr-rgx=[a-zA-Z0-9]*
 [MESSAGES CONTROL]
 # ignore some missing doc strings
 disable=C0115,C0116
+
+[TYPECHECK]
+generated-members=wx.*
+
+

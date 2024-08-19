@@ -10,6 +10,7 @@ import sys
 import platform
 import os
 import codecs
+
 # import third party packages
 import markdown
 import wx
@@ -46,6 +47,8 @@ class Window(wx.Frame):
         self.Bind(wx.EVT_MENU, self.onNew, newMenu)
         openMenu = fileMenu.Append(wx.ID_OPEN)
         self.Bind(wx.EVT_MENU, self.onOpen, openMenu)
+        importMenu = fileMenu.Append(wx.ID_ANY, "&Import other filetype\tCTRL+SHIFT+O")
+        self.Bind(wx.EVT_MENU, self.onImport, importMenu)
         saveMenu = fileMenu.Append(wx.ID_SAVE)
         self.Bind(wx.EVT_MENU, self.onSave, saveMenu)
         saveAsMenu = fileMenu.Append(wx.ID_SAVEAS)
@@ -109,7 +112,26 @@ class Window(wx.Frame):
                 return wx.ID_CANCEL
         return res
 
+
     def onOpen(self, e):
+        if self.edited:
+            if self.shouldSave() == wx.ID_CANCEL:
+                return
+        with wx.FileDialog(
+            self,
+            "Open",
+            self.dirname,
+            "",
+            "*.*",
+            style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST,
+        ) as dlg:
+            if dlg.ShowModal() == wx.ID_CANCEL:
+                return
+            self.filename = dlg.GetFilename()
+            self.dirname = dlg.GetDirectory()
+            self.open()
+
+    def onImport(self, e):
         if self.edited:
             if self.shouldSave() == wx.ID_CANCEL:
                 return
