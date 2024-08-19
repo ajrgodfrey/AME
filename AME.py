@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 """
-This module provides a very basic text editor and HTML reader 
+This module builds on a very basic text editor and HTML reader 
 so screen reader users can write and process markdown.
+It allows content to be imported from a range of file types using pandoc.
 """
 
 # import base packages
@@ -15,6 +16,7 @@ import codecs
 import markdown
 import wx
 from wx.html2 import WebView
+import pypandoc
 
 
 class WebPanel(wx.Panel):
@@ -131,6 +133,14 @@ class Window(wx.Frame):
             self.dirname = dlg.GetDirectory()
             self.open()
 
+
+    def pandocImport(self):
+        importContent = pypandoc.convert_file(os.path.join(self.dirname, self.filename), 'md')
+        self.mdPanel.control.ChangeValue(importContent)
+        self.edited = False
+        self.SetTitle(self.filename + " | Markdown Editor")
+        self.nb.SetSelection(0)
+
     def onImport(self, e):
         if self.edited:
             if self.shouldSave() == wx.ID_CANCEL:
@@ -147,7 +157,7 @@ class Window(wx.Frame):
                 return
             self.filename = dlg.GetFilename()
             self.dirname = dlg.GetDirectory()
-            self.open()
+            self.pandocImport()
 
     def onNew(self, e):
         if self.edited:
