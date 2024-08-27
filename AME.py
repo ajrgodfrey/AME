@@ -93,12 +93,17 @@ class Window(wx.Frame):
             self.open()
 
     def open(self):
-        f = open(os.path.join(self.dirname, self.filename), "r")
-        self.mdPanel.control.ChangeValue(f.read())
-        f.close()
+        file_path = os.path.join(self.dirname, self.filename)
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                self.mdPanel.control.ChangeValue(f.read())
+        except UnicodeDecodeError:
+            with open(file_path, "r", encoding="latin-1") as f:
+                self.mdPanel.control.ChangeValue(f.read())
         self.edited = False
         self.SetTitle(self.filename + " | Markdown Editor")
         self.nb.SetSelection(0)
+
 
     def shouldSave(self):
         dlg = wx.MessageDialog(
@@ -171,9 +176,9 @@ class Window(wx.Frame):
 
     def save(self):
         file = os.path.join(self.dirname, self.filename)
-        output_file = codecs.open(file, "w", encoding="utf-8", errors="replace")
         content = self.mdPanel.control.GetValue()
-        output_file.write(content)
+        with codecs.open(file, "w", encoding="utf-8", errors="replace") as output_file:
+            output_file.write(content)
         self.edited = False
 
     def onSave(self, e):
@@ -212,10 +217,6 @@ class Window(wx.Frame):
                 return
             filename = dlg.GetFilename()
             dirname = dlg.GetDirectory()
-            file = os.path.join(dirname, filename)
-            output_file = codecs.open(
-                file, "w", encoding="utf-8", errors="xmlcharrefreplace"
-            )
             htmlText = markdown.markdown(
                 self.mdPanel.control.GetValue(), extensions=["extra"]
             )
@@ -232,7 +233,9 @@ class Window(wx.Frame):
 </body>
 </html>
 """
-            output_file.write(htmlOutput)
+            file = os.path.join(dirname, filename)
+            with codecs.open(file, "w", encoding="utf-8", errors="xmlcharrefreplace") as output_file:
+                output_file.write(htmlOutput)
 
     def onClipboard(self, e):
         self.convert()
