@@ -104,7 +104,6 @@ class Window(wx.Frame):
         self.SetTitle(self.filename + " | Markdown Editor")
         self.nb.SetSelection(0)
 
-
     def shouldSave(self):
         dlg = wx.MessageDialog(
             None,
@@ -118,7 +117,6 @@ class Window(wx.Frame):
             if self.onSave(None) == wx.ID_CANCEL:
                 return wx.ID_CANCEL
         return res
-
 
     def onOpen(self, e):
         if self.edited:
@@ -138,9 +136,10 @@ class Window(wx.Frame):
             self.dirname = dlg.GetDirectory()
             self.open()
 
-
     def pandocImport(self):
-        importContent = pypandoc.convert_file(os.path.join(self.dirname, self.filename), 'md')
+        importContent = pypandoc.convert_file(
+            os.path.join(self.dirname, self.filename), "md"
+        )
         self.mdPanel.control.ChangeValue(importContent)
         self.edited = False
         self.SetTitle(self.filename + " | Markdown Editor")
@@ -184,8 +183,8 @@ class Window(wx.Frame):
     def onSave(self, e):
         if self.filename == "":
             return self.onSaveAs(e)
-        else:
-            self.save()
+        self.save()
+        return None  # Explicitly return None for consistency
 
     def onSaveAs(self, e):
         with wx.FileDialog(
@@ -202,6 +201,7 @@ class Window(wx.Frame):
             self.dirname = dlg.GetDirectory()
             self.save()
             self.SetTitle(self.filename + " | Markdown Editor")
+            return None  # Explicitly return None for consistency
 
     def onExport(self, e):
         self.convert()
@@ -234,7 +234,9 @@ class Window(wx.Frame):
 </html>
 """
             file = os.path.join(dirname, filename)
-            with codecs.open(file, "w", encoding="utf-8", errors="xmlcharrefreplace") as output_file:
+            with codecs.open(
+                file, "w", encoding="utf-8", errors="xmlcharrefreplace"
+            ) as output_file:
                 output_file.write(htmlOutput)
 
     def onClipboard(self, e):
