@@ -20,13 +20,15 @@ On Mac, press command instead of control.
 
 Import and export using pandoc is achieved using pypandoc, the Python wrapper to pandoc. This requires an installation of pandoc.
 
-Import is sorted. Hot key is CTRL+SHIFT+O
+Import is sorted. The user does not need to specify the file type, but Pandoc only imports a small rnage of files. Hot key is CTRL+SHIFT+O
 
-Next task is to build in the export via pandoc, initially just to html. This should allow maths to be included. N.B. the math will not be rendered correctly using just Python alone.
+Export to HTML via pandoc is available. This should allow maths to be included. N.B. the math will not be rendered correctly using just Python alone, or in the AME HTML pane, which is really just a preview pane if any equations are included.
+
+Protection against the user not having Pandoc visible is in need of being added.
 
 
 
-## updates and alteratons to the original AME
+## updates and alterations to the original AME
 
 Hints and corrections offered using pylint and blacken tools have been incorporated. Pylint still throws warnings about a few things but they of low significance.
 

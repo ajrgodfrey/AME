@@ -246,7 +246,7 @@ class Window(wx.Frame):
         self.onSave(e)
         input = Path(os.path.join(self.dirname, self.filename))
         output = input.with_suffix('.html')
-        pypandoc.convert_file(input, 'html', outputfile=output)
+        pypandoc.convert_file(input, 'html5', outputfile=output, extra_args=['-s',  '--mathjax'])
 
 
     def onClipboard(self, e):
