@@ -58,7 +58,9 @@ class Window(wx.Frame):
         self.Bind(wx.EVT_MENU, self.onSaveAs, saveAsMenu)
         exportMenu = fileMenu.Append(wx.ID_ANY, "&Export (simple)\tCTRL+E")
         self.Bind(wx.EVT_MENU, self.onExport, exportMenu)
-        exportPandocMenu = fileMenu.Append(wx.ID_ANY, "Export (with &Pandoc)\tCTRL+SHIFT+E")
+        exportPandocMenu = fileMenu.Append(
+            wx.ID_ANY, "Export (with &Pandoc)\tCTRL+SHIFT+E"
+        )
         self.Bind(wx.EVT_MENU, self.onExportPandoc, exportPandocMenu)
         clipboardMenu = fileMenu.Append(
             wx.ID_ANY, "&Copy HTML to Clipboard\tCTRL+SHIFT+C"
@@ -245,9 +247,10 @@ class Window(wx.Frame):
     def onExportPandoc(self, e):
         self.onSave(e)
         input = Path(os.path.join(self.dirname, self.filename))
-        output = input.with_suffix('.html')
-        pypandoc.convert_file(input, 'html5', outputfile=output, extra_args=['-s',  '--mathjax'])
-
+        output = input.with_suffix(".html")
+        pypandoc.convert_file(
+            input, "html5", outputfile=output, extra_args=["-s", "--mathjax"]
+        )
 
     def onClipboard(self, e):
         self.convert()
