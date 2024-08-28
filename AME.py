@@ -3,7 +3,8 @@
 """
 This module builds on a very basic text editor and HTML reader 
 so screen reader users can write and process markdown.
-It allows content to be imported from a range of file types using pandoc.
+It allows content to be imported from a range of file types using pandoc. 
+Users can also export to HTML using Pandoc so mathematical notation can be displayed using mathjax.
 """
 
 # import base packages
@@ -152,6 +153,9 @@ class Window(wx.Frame):
         self.nb.SetSelection(0)
 
     def onImport(self, e):
+        if not self.is_pandoc_installed():
+            self.noPandocInstalled()
+            return
         if self.edited:
             if self.shouldSave() == wx.ID_CANCEL:
                 return
@@ -249,11 +253,7 @@ class Window(wx.Frame):
         """Convert a file using pandoc if available."""
         self.onSave(e)
         if not self.is_pandoc_installed():
-            wx.MessageBox(
-                "Pandoc is not installed or not found in PATH. Please install pandoc to use this feature.",
-                "Pandoc Not Found",
-                wx.ICON_ERROR | wx.OK,
-            )
+            self.noPandocInstalled()
             return
         input = Path(os.path.join(self.dirname, self.filename))
         output_file = input.with_suffix(".html")
@@ -324,6 +324,14 @@ class Window(wx.Frame):
     def is_pandoc_installed(self):
         """Check if pandoc is installed and available in the system PATH."""
         return shutil.which("pandoc") is not None
+
+    def noPandocInstalled(self):
+        wx.MessageBox(
+            """Pandoc is not installed or not found in PATH. 
+              Please install pandoc to use this feature.""",
+            "Pandoc Not Found",
+            wx.ICON_ERROR | wx.OK,
+        )
 
 
 app = wx.App(False)

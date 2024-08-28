@@ -24,7 +24,7 @@ Import is sorted. The user does not need to specify the file type, but Pandoc on
 
 Export to HTML via pandoc is available. This should allow maths to be included. N.B. the math will not be rendered correctly using just Python alone, or in the AME HTML pane, which is really just a preview pane if any equations are included.
 
-Protection against the user not having Pandoc visible is in need of testing. Needs to be run on a machine that does not have pandoc installed.
+Protection against the user not having Pandoc visible is in need of testing. It needs to be run on a machine that does not have pandoc installed, both for import and export.
 
 ## Other updates and alterations to the original AME
 
