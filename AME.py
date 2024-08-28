@@ -11,6 +11,7 @@ import sys
 import platform
 import os
 import codecs
+from pathlib import Path
 
 # import third party packages
 import markdown
@@ -55,8 +56,10 @@ class Window(wx.Frame):
         self.Bind(wx.EVT_MENU, self.onSave, saveMenu)
         saveAsMenu = fileMenu.Append(wx.ID_SAVEAS)
         self.Bind(wx.EVT_MENU, self.onSaveAs, saveAsMenu)
-        exportMenu = fileMenu.Append(wx.ID_ANY, "&Export\tCTRL+E")
+        exportMenu = fileMenu.Append(wx.ID_ANY, "&Export (simple)\tCTRL+E")
         self.Bind(wx.EVT_MENU, self.onExport, exportMenu)
+        exportPandocMenu = fileMenu.Append(wx.ID_ANY, "Export (with &Pandoc)\tCTRL+SHIFT+E")
+        self.Bind(wx.EVT_MENU, self.onExportPandoc, exportPandocMenu)
         clipboardMenu = fileMenu.Append(
             wx.ID_ANY, "&Copy HTML to Clipboard\tCTRL+SHIFT+C"
         )
@@ -238,6 +241,13 @@ class Window(wx.Frame):
                 file, "w", encoding="utf-8", errors="xmlcharrefreplace"
             ) as output_file:
                 output_file.write(htmlOutput)
+
+    def onExportPandoc(self, e):
+        self.onSave(e)
+        input = Path(os.path.join(self.dirname, self.filename))
+        output = input.with_suffix('.html')
+        pypandoc.convert_file(input, 'html', outputfile=output)
+
 
     def onClipboard(self, e):
         self.convert()
