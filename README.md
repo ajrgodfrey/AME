@@ -24,11 +24,9 @@ Import is sorted. The user does not need to specify the file type, but Pandoc on
 
 Export to HTML via pandoc is available. This should allow maths to be included. N.B. the math will not be rendered correctly using just Python alone, or in the AME HTML pane, which is really just a preview pane if any equations are included.
 
-Protection against the user not having Pandoc visible is in need of being added.
+Protection against the user not having Pandoc visible is in need of testing. Needs to be run on a machine that does not have pandoc installed.
 
+## Other updates and alterations to the original AME
 
-
-## updates and alterations to the original AME
-
-Hints and corrections offered using pylint and blacken tools have been incorporated. Pylint still throws warnings about a few things but they of low significance.
+Hints and corrections offered using pylint and blacken tools have been incorporated. Pylint still throws warnings about a few things but they of low significance. Most relate to pylint not knowing about the wx use of `(self, e)` style in function definitions.
 

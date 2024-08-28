@@ -12,6 +12,7 @@ import platform
 import os
 import codecs
 from pathlib import Path
+import shutil
 
 # import third party packages
 import markdown
@@ -245,11 +246,24 @@ class Window(wx.Frame):
                 output_file.write(htmlOutput)
 
     def onExportPandoc(self, e):
+        """Convert a file using pandoc if available."""
         self.onSave(e)
+        if not self.is_pandoc_installed():
+            wx.MessageBox(
+                "Pandoc is not installed or not found in PATH. Please install pandoc to use this feature.",
+                "Pandoc Not Found",
+                wx.ICON_ERROR | wx.OK,
+            )
+            return
         input = Path(os.path.join(self.dirname, self.filename))
-        output = input.with_suffix(".html")
+        output_file = input.with_suffix(".html")
         pypandoc.convert_file(
-            input, "html5", outputfile=output, extra_args=["-s", "--mathjax"]
+            input, "html", outputfile=output_file, extra_args=["-s", "--mathjax"]
+        )
+        wx.MessageBox(
+            f"Conversion successful. Output saved to {output_file}",
+            "Success",
+            wx.ICON_INFORMATION | wx.OK,
         )
 
     def onClipboard(self, e):
@@ -306,6 +320,10 @@ class Window(wx.Frame):
             self.mdPanel.control.GetValue(), extensions=["extra"]
         )
         self.WebPanel.browser.SetPage(htmlText, "")
+
+    def is_pandoc_installed(self):
+        """Check if pandoc is installed and available in the system PATH."""
+        return shutil.which("pandoc") is not None
 
 
 app = wx.App(False)
