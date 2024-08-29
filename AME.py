@@ -71,10 +71,12 @@ class Window(wx.Frame):
         exitMenu = fileMenu.Append(wx.ID_EXIT)
         self.Bind(wx.EVT_MENU, self.OnExit, exitMenu)
         viewMenu = wx.Menu()
-        htmlMenu = viewMenu.Append(wx.ID_ANY, "&HTML\tCTRL+2")
-        self.Bind(wx.EVT_MENU, self.onViewHtml, htmlMenu)
         markdownMenu = viewMenu.Append(wx.ID_ANY, "&Markdown\tCTRL+1")
         self.Bind(wx.EVT_MENU, self.onViewMarkdown, markdownMenu)
+        htmlMenu = viewMenu.Append(wx.ID_ANY, "&HTML\tCTRL+2")
+        self.Bind(wx.EVT_MENU, self.onViewHtml, htmlMenu)
+        toggleViewMenu = viewMenu.Append(wx.ID_ANY, "Switch to/from HTML\tF4")
+        self.Bind(wx.EVT_MENU, self.onTogglePreview, toggleViewMenu)
         helpMenu = wx.Menu()
         helpMenu.Append(wx.ID_ABOUT, "&About")
         self.Bind(wx.EVT_MENU, self.onAbout, id=wx.ID_ABOUT)
@@ -345,11 +347,10 @@ Credit is due to the originator. AME was a nice little app to start with.
         dlg.Destroy()
 
     def onTogglePreview(self, e):
-        if self.nb.GetPageCount() == 1:
-            self.nb.AddPage(self.WebPanel, "HTML Preview")
-            self.convert()
-        else:
-            self.nb.RemovePage(1)
+        if self.nb.GetSelection() == 0:  # If currently in Markdown pane
+            self.onViewHtml(None)
+        else:  # If currently in HTML pane
+            self.onViewMarkdown(None)
 
 
 app = wx.App(False)
