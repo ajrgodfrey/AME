@@ -227,9 +227,6 @@ class Window(wx.Frame):
                 return
             filename = dlg.GetFilename()
             dirname = dlg.GetDirectory()
-            htmlText = markdown.markdown(
-                self.mdPanel.control.GetValue(), extensions=["extra"]
-            )
             htmlOutput = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -239,7 +236,7 @@ class Window(wx.Frame):
     <title></title>
 </head>
 <body>
-{htmlText}
+{self.convert_to_html()}
 </body>
 </html>
 """
@@ -268,11 +265,8 @@ class Window(wx.Frame):
 
     def onClipboard(self, e):
         self.convert()
-        htmlText = markdown.markdown(
-            self.mdPanel.control.GetValue(), extensions=["extra"]
-        )
         if wx.TheClipboard.Open():
-            wx.TheClipboard.SetData(wx.TextDataObject(htmlText))
+            wx.TheClipboard.SetData(wx.TextDataObject(self.convert_to_html()))
             wx.TheClipboard.Close()
 
     def OnExit(self, e):
@@ -315,11 +309,11 @@ class Window(wx.Frame):
             self.convert()
         self.focus(focus)
 
+    def convert_to_html(self):
+        return markdown.markdown(self.mdPanel.control.GetValue(), extensions=["extra"])
+
     def convert(self):
-        htmlText = markdown.markdown(
-            self.mdPanel.control.GetValue(), extensions=["extra"]
-        )
-        self.WebPanel.browser.SetPage(htmlText, "")
+        self.WebPanel.browser.SetPage(self.convert_to_html(), "")
 
     def is_pandoc_installed(self):
         """Check if pandoc is installed and available in the system PATH."""
