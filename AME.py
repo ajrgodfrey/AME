@@ -75,10 +75,14 @@ class Window(wx.Frame):
         self.Bind(wx.EVT_MENU, self.onViewHtml, htmlMenu)
         markdownMenu = viewMenu.Append(wx.ID_ANY, "&Markdown\tCTRL+1")
         self.Bind(wx.EVT_MENU, self.onViewMarkdown, markdownMenu)
+        helpMenu = wx.Menu()
+        helpMenu.Append(wx.ID_ABOUT, "&About")
+        self.Bind(wx.EVT_MENU, self.onAbout, id=wx.ID_ABOUT)
 
         menuBar = wx.MenuBar()
         menuBar.Append(fileMenu, "&File")
         menuBar.Append(viewMenu, "&View")
+        menuBar.Append(helpMenu, "&Help")
         self.SetMenuBar(menuBar)
         self.nb = wx.Notebook(self)
         self.mdPanel = MdPanel(self.nb)
@@ -326,6 +330,26 @@ class Window(wx.Frame):
             "Pandoc Not Found",
             wx.ICON_ERROR | wx.OK,
         )
+
+    def onAbout(self, e):
+        dlg = wx.MessageDialog(
+            self,
+            """A simple accessible Markdown editor which works well for screen reader users.\n 
+The original AME was found on GitHub and modified by Jonathan Godfrey.\n
+Credit is due to the originator. AME was a nice little app to start with.
+""",
+            "About Markdown Editor",
+            wx.OK,
+        )
+        dlg.ShowModal()
+        dlg.Destroy()
+
+    def onTogglePreview(self, e):
+        if self.nb.GetPageCount() == 1:
+            self.nb.AddPage(self.WebPanel, "HTML Preview")
+            self.convert()
+        else:
+            self.nb.RemovePage(1)
 
 
 app = wx.App(False)
