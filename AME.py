@@ -78,7 +78,7 @@ class Window(wx.Frame):
         toggleViewMenu = viewMenu.Append(wx.ID_ANY, "Switch to/from HTML\tF4")
         self.Bind(wx.EVT_MENU, self.onTogglePreview, toggleViewMenu)
         helpMenu = wx.Menu()
-        helpMenu.Append(wx.ID_ABOUT, "&About")
+        helpMenu.Append(wx.ID_ABOUT, "&About\tF1")
         self.Bind(wx.EVT_MENU, self.onAbout, id=wx.ID_ABOUT)
 
         menuBar = wx.MenuBar()
